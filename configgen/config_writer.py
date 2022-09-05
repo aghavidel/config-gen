@@ -33,13 +33,21 @@ class ConfigWriter:
         self.current_indent = 0
         self.config_lines.clear()
 
-    def write(self, path=None):
+    def write(self, path=None, append=False):
         if not path:
-            with open(self.name + ".conf", "w") as config_file:
-                config_file.writelines('\n'.join(self.config_lines))
+            if not append:
+                with open(self.name + ".conf", "w") as config_file:
+                    config_file.writelines('\n'.join(self.config_lines))
+            else:
+                with open(self.name + ".conf", "a") as config_file:
+                    config_file.writelines('\n'.join(self.config_lines))
         else:
-            with open(os.path.join(path, self.name + ".conf"), "w") as config_file:
-                config_file.writelines('\n'.join(self.config_lines))
+            if not append:
+                with open(os.path.join(path, self.name + ".conf"), "w") as config_file:
+                    config_file.writelines('\n'.join(self.config_lines))
+            else:
+                with open(os.path.join(path, self.name + ".conf"), "a") as config_file:
+                    config_file.writelines('\n'.join(self.config_lines))
 
     def __str__(self) -> str:
         return "\n".join(self.config_lines)

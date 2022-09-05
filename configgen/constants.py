@@ -1,6 +1,6 @@
 import enum
 
-INDENT = "  "
+INDENT = " "
 
 BREAK = "!"
 
@@ -68,6 +68,7 @@ class ConfigKeys:
     DEFAULT_ISIS_AFI = "default-isis-afi"
     DEFAULT_ISIS_AREA_NUM = "default-isis-area-num"
     DEFAULT_ISIS_SELECTOR = "default-isis-selector"
+    DEFAULT_ISIS_ADDRESS_FAMILIES = "default-isis-af"
 
 
 DEFAULT_CONFIGS = {
@@ -79,5 +80,8 @@ DEFAULT_CONFIGS = {
     "data-link-subnet-len": 24,
     "default-isis-afi": "49",
     "default-isis-area-num": "0001",
-    "default-isis-selector": "00"
+    "default-isis-selector": "00",
+    "default-isis-af": [
+        AddressFamily.IPv4_UNICAST
+    ]
 }
