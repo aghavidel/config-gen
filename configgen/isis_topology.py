@@ -126,6 +126,14 @@ class ISISTopology:
             ISISNode(data_node, self.is_level, self.process_name, config)
             for data_node in self.point_to_point_topology.nodes
         ]
+        self.af_metric_descriptor: Dict[
+            Tuple[int, int],
+            List[Tuple[AddressFamily, int]]
+        ] = dict()
+
+        self.identifier_af_metric_descriptor: Dict[
+            int, List[Tuple[AddressFamily, int]]
+        ] = dict()
 
     def _add_link(self, i, j, af_metric_list: List[Tuple[AddressFamily, int]]):
         transmit_interface = self.\
@@ -146,6 +154,8 @@ class ISISTopology:
     ], identifier_af_metric_descriptor: Dict[
         int, List[Tuple[AddressFamily, int]]
     ]):
+        self.af_metric_descriptor = af_metric_descriptor
+        self.identifier_af_metric_descriptor = identifier_af_metric_descriptor
         self._up_identifier_links(identifier_af_metric_descriptor)
         for i, j in af_metric_descriptor.keys():
             self._add_link(i, j, af_metric_descriptor[(i, j)])

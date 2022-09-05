@@ -14,7 +14,6 @@ MGMT_LINK_PREFIX = "MgmtEth 0/RP0/CPU0/"
 
 LOOPBACK_LINK_PREFIX = "Loopback "
 
-
 get_loopback = lambda n: LOOPBACK_LINK_PREFIX + str(n)
 get_data_link = lambda n: DATA_LINK_PREFIX + str(n)
 get_mgmt = lambda n: MGMT_LINK_PREFIX + str(0)
@@ -57,6 +56,15 @@ class AddressFamily(StringValuedEnum):
     IPv4_UNICAST = "ipv4 unicast"
     IPv6_UNICAST = "ipv6 unicast"
 
+    @classmethod
+    def get_supported_address_families(cls):
+        return [
+            getattr(cls, attr) for attr in cls.__dict__
+            if not callable(getattr(cls, attr))
+            and not attr.startswith("__")
+            and not attr.startswith("_")
+        ]
+
 
 class ConfigKeys:
     CDP = "cdp"
@@ -85,3 +93,6 @@ DEFAULT_CONFIGS = {
         AddressFamily.IPv4_UNICAST
     ]
 }
+
+if __name__ == '__main__':
+    print(AddressFamily.get_supported_address_families())
