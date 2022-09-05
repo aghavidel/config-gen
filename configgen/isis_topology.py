@@ -1,4 +1,3 @@
-import os.path
 import textwrap
 from .point_to_point_topology import *
 
@@ -53,7 +52,7 @@ class ISISInterface:
         elif self.node_interface.type == InterfaceTypes.DATA:
             self._configure_data_interface(config_writer)
 
-        config_writer.unindent()
+        # config_writer.unindent()
 
 
 class ISISNode:
@@ -64,15 +63,15 @@ class ISISNode:
     def __init__(self, data_node: DataNode, is_level: ISLevel, process_name: str,
                  config: dict = DEFAULT_CONFIGS) -> None:
         self.data_node = data_node
+        self.config = config
         self.net_id = self._generate_net_id()
         self.is_level = is_level
         self.process_name = process_name
-        self.config = config
         self.interfaces: List[ISISInterface] = []
 
     def _generate_net_id(self) -> str:
         octets = [ISISNode._zero_pad_octet(octet) for octet in str(self.data_node.identity).split(".")]
-        net_parts = textwrap.wrap("".join(octets), 3)
+        net_parts = textwrap.wrap("".join(octets), 4)
         return ".".join([
             self.config[ConfigKeys.DEFAULT_ISIS_AFI],
             self.config[ConfigKeys.DEFAULT_ISIS_AREA_NUM],
@@ -152,8 +151,9 @@ class ISISTopology:
             self._add_link(i, j, af_metric_descriptor[(i, j)])
 
     def write_config(self):
-        os.makedirs(self.point_to_point_topology.path, exist_ok=True)
+        self.point_to_point_topology.write_config()
         for node in self.nodes:
             config_writer = ConfigWriter(node.data_node.hostname)
             node.write_config(config_writer)
+            config_writer.new_line()
             config_writer.write(self.point_to_point_topology.path, append=True)

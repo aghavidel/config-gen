@@ -22,12 +22,16 @@ class ConfigWriter:
 
     def unindent(self):
         if self.current_indent > 0:
-            self.config_lines.append(BREAK)
             self.current_indent -= 1
+            self.config_lines.append(str(INDENT * self.current_indent) + BREAK)
 
     def line_return(self):
         for _ in range(self.current_indent):
             self.unindent()
+
+    def new_line(self):
+        self.line_return()
+        self.config_lines.append("")
 
     def reset(self):
         self.current_indent = 0

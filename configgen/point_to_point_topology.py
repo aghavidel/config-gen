@@ -174,8 +174,8 @@ class PointToPointTopology:
 
     def generate_point_to_point_topology(self, node_identifiers: List[Tuple[str, str, str]],
                                          links: List[Tuple[int, int]]):
-        for hostname, mgmt, identifier in node_identifiers:
-            self._add_node(hostname, IPv4Interface(mgmt), IPv4Interface(identifier))
+        for hostname, identifier, mgmt in node_identifiers:
+            self._add_node(hostname, IPv4Address(identifier), IPv4Interface(mgmt))
 
         for i, j in links:
             self._add_link(i, j)
@@ -188,4 +188,5 @@ class PointToPointTopology:
         for node in self.nodes:
             config_writer = ConfigWriter(node.hostname)
             node.write_config(config_writer)
+            config_writer.new_line()
             config_writer.write(self.path)
